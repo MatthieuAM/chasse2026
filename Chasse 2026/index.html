@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chasse au trésor - Partie 1</title>
+  <style>
+    :root {
+      --bg1: #0f172a;
+      --bg2: #1e293b;
+      --panel: rgba(15, 23, 42, 0.88);
+      --text: #f8fafc;
+      --muted: #cbd5e1;
+      --gold: #fbbf24;
+      --gold-dark: #d97706;
+      --blue: #38bdf8;
+      --green: #22c55e;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      min-height: 100vh;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top, rgba(56,189,248,0.16), transparent 25%),
+        linear-gradient(135deg, var(--bg1), var(--bg2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 900px;
+      background: var(--panel);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+      backdrop-filter: blur(10px);
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      text-align: center;
+      color: var(--gold);
+      font-size: clamp(2rem, 4vw, 3rem);
+    }
+
+    .subtitle {
+      text-align: center;
+      color: var(--muted);
+      margin-bottom: 24px;
+      line-height: 1.6;
+    }
+
+    .progress-wrap {
+      margin-bottom: 24px;
+    }
+
+    .progress-top {
+      display: flex;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-bottom: 8px;
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 14px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--gold-dark), var(--gold));
+      transition: width 0.35s ease;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px;
+      padding: 24px;
+    }
+
+    .step {
+      color: var(--blue);
+      font-size: 0.92rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-weight: bold;
+      margin-bottom: 12px;
+    }
+
+    .riddle-title {
+      margin: 0 0 14px;
+      font-size: 1.6rem;
+    }
+
+    .riddle-text {
+      white-space: pre-line;
+      color: var(--text);
+      font-size: 1.12rem;
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+
+    .hint-box {
+      display: none;
+      margin-top: 12px;
+      padding: 14px;
+      border-left: 4px solid var(--blue);
+      border-radius: 12px;
+      background: rgba(56,189,248,0.08);
+      color: #dbeafe;
+      line-height: 1.6;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    button {
+      border: none;
+      border-radius: 14px;
+      padding: 14px 18px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-primary {
+      background: linear-gradient(90deg, var(--gold-dark), var(--gold));
+      color: #111827;
+    }
+
+    .btn-secondary {
+      background: rgba(255,255,255,0.08);
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .final-screen {
+      display: none;
+      text-align: center;
+      padding: 24px 8px 8px;
+    }
+
+    .final-screen .emoji {
+      font-size: 4rem;
+      margin-bottom: 14px;
+    }
+
+    .final-screen h2 {
+      margin: 0 0 10px;
+      color: var(--gold);
+      font-size: 2rem;
+    }
+
+    .final-screen p {
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 1.08rem;
+      max-width: 650px;
+      margin: 0 auto 20px;
+    }
+
+    .small-note {
+      margin-top: 18px;
+      text-align: center;
+      color: #94a3b8;
+      font-size: 0.92rem;
+    }
+
+    @media (max-width: 640px) {
+      .container {
+        padding: 18px;
+      }
+
+      .card {
+        padding: 18px;
+      }
+
+      .buttons {
+        flex-direction: column;
+      }
+
+      button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🗺️ Chasse au trésor</h1>
+    <div class="subtitle">
+      Partie 1 : lis chaque énigme et suis la direction pour savoir où aller.
+      <br>
+      Aucune réponse à écrire dans cette partie.
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-top">
+        <span>Progression</span>
+        <span id="progressText">Énigme 1 / 3</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+    </div>
+
+    <div class="card" id="gameCard">
+      <div class="step" id="stepLabel">Énigme 1</div>
+      <h2 class="riddle-title" id="riddleTitle">Chargement...</h2>
+      <div class="riddle-text" id="riddleText"></div>
+
+      <div class="buttons">
+        <button class="btn-secondary" id="hintBtn">Voir l'indice</button>
+        <button class="btn-primary" id="nextBtn">Énigme suivante</button>
+      </div>
+
+      <div class="hint-box" id="hintBox"></div>
+    </div>
+
+    <div class="final-screen" id="finalScreen">
+  <div class="emoji">🏴‍☠️</div>
+  <h2>Partie 1 terminée</h2>
+  <p>
+    Bravo ! Tu as réussi les 3 premières énigmes 🎉
+  </p>
+
+  <p style="margin-top: 12px; font-weight: bold; color: #fbbf24;">
+    🔥 La suite dès demain...
+  </p>
+
+  <p style="font-size: 1.1rem;">
+    La partie 2 t’attend avec plein de surprises dingues 😈💰
+  </p>
+
+  <button class="btn-primary" id="restartBtn">Recommencer</button>
+</div>
+
+    <div class="small-note">
+      Tu peux modifier les textes des énigmes directement dans le code JavaScript.
+    </div>
+  </div>
+
+  <script>
+    const enigmes = [
+      {
+        titre: "Énigme 1",
+        texte: "Cherche l'endroit le plus Noël de Noël.\nIl est vert... ah.",
+        indice: "Pense à quelque chose de très lié à Noël, souvent vert, avec des décorations."
+      },
+      {
+        titre: "Énigme 2",
+        texte: "Je suis Air... but i'm fryer.",
+        indice: "C'est un appareil de cuisine très à la mode."
+      },
+      {
+        titre: "Énigme 3",
+        texte: "Si t'as des allergies, c'est dedans.",
+        indice: "Cherche un endroit ou un objet où l'on range souvent les médicaments."
+      }
+    ];
+
+    let indexActuel = 0;
+
+    const stepLabel = document.getElementById("stepLabel");
+    const riddleTitle = document.getElementById("riddleTitle");
+    const riddleText = document.getElementById("riddleText");
+    const hintBox = document.getElementById("hintBox");
+    const hintBtn = document.getElementById("hintBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const restartBtn = document.getElementById("restartBtn");
+    const progressText = document.getElementById("progressText");
+    const progressFill = document.getElementById("progressFill");
+    const gameCard = document.getElementById("gameCard");
+    const finalScreen = document.getElementById("finalScreen");
+
+    function updateProgress() {
+      progressText.textContent = `Énigme ${indexActuel + 1} / ${enigmes.length}`;
+      const percent = (indexActuel / enigmes.length) * 100;
+      progressFill.style.width = percent + "%";
+    }
+
+    function afficherEnigme() {
+      const enigme = enigmes[indexActuel];
+      stepLabel.textContent = `Énigme ${indexActuel + 1}`;
+      riddleTitle.textContent = enigme.titre;
+      riddleText.textContent = enigme.texte;
+      hintBox.style.display = "none";
+      hintBox.textContent = enigme.indice;
+      updateProgress();
+
+      if (indexActuel === enigmes.length - 1) {
+        nextBtn.textContent = "Terminer la partie";
+      } else {
+        nextBtn.textContent = "Énigme suivante";
+      }
+    }
+
+    function afficherIndice() {
+      hintBox.style.display = hintBox.style.display === "block" ? "none" : "block";
+    }
+
+    function enigmeSuivante() {
+      indexActuel++;
+
+      if (indexActuel < enigmes.length) {
+        afficherEnigme();
+      } else {
+        terminerPartie();
+      }
+    }
+
+    function terminerPartie() {
+      gameCard.style.display = "none";
+      finalScreen.style.display = "block";
+      progressText.textContent = `Énigmes terminées`;
+      progressFill.style.width = "100%";
+    }
+
+    function recommencer() {
+      indexActuel = 0;
+      gameCard.style.display = "block";
+      finalScreen.style.display = "none";
+      afficherEnigme();
+    }
+
+    hintBtn.addEventListener("click", afficherIndice);
+    nextBtn.addEventListener("click", enigmeSuivante);
+    restartBtn.addEventListener("click", recommencer);
+
+    afficherEnigme();
+  </script>
+</body>
+</html>
