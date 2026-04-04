@@ -3,67 +3,291 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Chasse au trésor - Partie 1</title>
+  <title>Chasse au trésor - Thaïlande</title>
   <style>
     :root {
-      --bg1: #0f172a;
-      --bg2: #1e293b;
-      --panel: rgba(15, 23, 42, 0.88);
-      --text: #f8fafc;
-      --muted: #cbd5e1;
-      --gold: #fbbf24;
-      --gold-dark: #d97706;
-      --blue: #38bdf8;
-      --green: #22c55e;
+      --bg-top: #2a1b4f;
+      --bg-mid: #6f3b6e;
+      --bg-warm: #ff9a5a;
+      --sand: #f6d39c;
+      --gold: #ffd166;
+      --gold-2: #f4a261;
+      --leaf: #1f8a70;
+      --leaf-dark: #145a4a;
+      --sea: #2d9cdb;
+      --text: #fff8ef;
+      --muted: #f6e6cb;
+      --panel: rgba(15, 16, 30, 0.55);
+      --panel-strong: rgba(10, 12, 22, 0.72);
+      --border: rgba(255,255,255,0.14);
+      --hint: rgba(45,156,219,0.12);
+      --danger: #ff8c8c;
+      --success: #8df5bf;
+      --shadow: rgba(0,0,0,0.28);
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
-    body {
+    html, body {
       margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      min-height: 100vh;
+      min-height: 100%;
+      font-family: "Trebuchet MS", "Segoe UI", Arial, sans-serif;
       color: var(--text);
-      background:
-        radial-gradient(circle at top, rgba(56,189,248,0.16), transparent 25%),
-        linear-gradient(135deg, var(--bg1), var(--bg2));
+      background: linear-gradient(180deg, var(--bg-top) 0%, var(--bg-mid) 38%, var(--bg-warm) 76%, #ffd38d 100%);
+      overflow-x: hidden;
+    }
+
+    body { position: relative; }
+
+    .scene {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .sun {
+      position: absolute;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      top: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: radial-gradient(circle, #fff5c3 0%, #ffd36e 42%, rgba(255,211,110,0.45) 68%, transparent 72%);
+      animation: sunPulse 6s ease-in-out infinite;
+    }
+
+    @keyframes sunPulse {
+      0%,100% { transform: translateX(-50%) scale(1); }
+      50% { transform: translateX(-50%) scale(1.04); }
+    }
+
+    .temple {
+      position: absolute;
+      left: 8%;
+      bottom: 25%;
+      width: 220px;
+      height: 220px;
+      opacity: 0.35;
+    }
+    .temple .base {
+      position: absolute;
+      bottom: 0;
+      left: 28px;
+      width: 160px;
+      height: 84px;
+      background: linear-gradient(180deg, #41345f, #211930);
+      clip-path: polygon(0 100%,100% 100%,92% 24%,8% 24%);
+    }
+    .temple .roof1, .temple .roof2, .temple .roof3 {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(180deg, #6a557f, #2b203b);
+      clip-path: polygon(50% 0, 100% 100%, 0 100%);
+    }
+    .temple .roof1 { bottom: 62px; width: 188px; height: 72px; }
+    .temple .roof2 { bottom: 110px; width: 128px; height: 58px; }
+    .temple .roof3 { bottom: 148px; width: 76px; height: 46px; }
+
+    .sea {
+      position: absolute;
+      left: 0; right: 0; bottom: 14%;
+      height: 18%;
+      background: linear-gradient(180deg, rgba(59,168,223,0.45), rgba(18,94,145,0.82));
+    }
+    .wave {
+      position: absolute;
+      left: -10%; width: 120%; height: 26px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.12);
+      filter: blur(4px);
+      animation: waveMove 7s ease-in-out infinite;
+    }
+    .wave.w1 { bottom: calc(14% + 58px); }
+    .wave.w2 { bottom: calc(14% + 24px); opacity: 0.65; animation-delay: 1.5s; }
+    @keyframes waveMove {
+      0%,100% { transform: translateX(0); }
+      50% { transform: translateX(-28px); }
+    }
+
+    .sand {
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      height: 18%;
+      background: linear-gradient(180deg, #f9d99f, #e7b66e);
+    }
+
+    .palm {
+      position: absolute;
+      bottom: 6%;
+      width: 220px;
+      height: 320px;
+      opacity: 0.9;
+      transform-origin: bottom center;
+      animation: sway 5.6s ease-in-out infinite;
+    }
+    .palm.right { right: -20px; transform: scaleX(-1); }
+    .palm.left { left: -8px; }
+    @keyframes sway {
+      0%,100% { transform: rotate(0deg); }
+      50% { transform: rotate(2deg); }
+    }
+    .palm.right { animation-duration: 6.2s; }
+    .trunk {
+      position: absolute;
+      bottom: 0; left: 88px;
+      width: 22px; height: 220px;
+      background: linear-gradient(180deg, #8b5a32, #5c381c);
+      border-radius: 18px;
+      transform: skewX(-7deg);
+    }
+    .leaf {
+      position: absolute;
+      left: 100px;
+      width: 120px; height: 30px;
+      background: linear-gradient(90deg, var(--leaf), var(--leaf-dark));
+      border-radius: 50px 0 50px 0;
+      transform-origin: left center;
+    }
+    .leaf.l1 { top: 42px; transform: rotate(-62deg); }
+    .leaf.l2 { top: 58px; transform: rotate(-34deg); }
+    .leaf.l3 { top: 78px; transform: rotate(-8deg); }
+    .leaf.l4 { top: 94px; transform: rotate(20deg); }
+    .leaf.l5 { top: 102px; transform: rotate(48deg); }
+    .leaf.l6 { top: 92px; transform: rotate(82deg); }
+
+    .lantern {
+      position: absolute;
+      width: 24px; height: 34px;
+      border-radius: 50% 50% 48% 48%;
+      background: radial-gradient(circle at 50% 35%, #fff6cc, #ffd67b 48%, #f19e56 80%);
+      box-shadow: 0 0 22px rgba(255,210,120,0.4);
+      animation: rise linear infinite;
+      opacity: 0.8;
+    }
+    .lantern::after {
+      content: "";
+      position: absolute;
+      bottom: -6px; left: 50%;
+      width: 2px; height: 8px;
+      transform: translateX(-50%);
+      background: rgba(255,235,200,0.7);
+    }
+    .lantern.l1 { left: 12%; bottom: -50px; animation-duration: 14s; }
+    .lantern.l2 { left: 30%; bottom: -54px; animation-duration: 17s; animation-delay: 3s; }
+    .lantern.l3 { left: 48%; bottom: -48px; animation-duration: 16s; animation-delay: 1s; }
+    .lantern.l4 { left: 66%; bottom: -58px; animation-duration: 18s; animation-delay: 5s; }
+    .lantern.l5 { left: 84%; bottom: -52px; animation-duration: 15s; animation-delay: 2s; }
+    @keyframes rise {
+      0% { transform: translateY(0) scale(1); opacity: 0; }
+      10% { opacity: 0.85; }
+      100% { transform: translateY(-110vh) scale(1.08); opacity: 0; }
+    }
+
+    .app {
+      position: relative;
+      z-index: 2;
+      min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 24px;
+      padding: 28px;
     }
 
     .container {
-      width: 100%;
-      max-width: 900px;
+      width: min(980px, 100%);
       background: var(--panel);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 24px;
-      padding: 28px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.35);
-      backdrop-filter: blur(10px);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      padding: 24px;
+      backdrop-filter: blur(14px);
+      box-shadow: 0 24px 60px var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .brand {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .pill {
+      padding: 8px 12px;
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .admin-access {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .admin-access input {
+      width: 110px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.08);
+      color: white;
+      outline: none;
+    }
+
+    .admin-access button,
+    .main-actions button,
+    .final-actions button,
+    .admin-panel button {
+      border: none;
+      border-radius: 14px;
+      padding: 12px 16px;
+      font-size: 0.98rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.18s ease;
+    }
+
+    button:hover { transform: translateY(-1px); }
+
+    .btn-primary {
+      background: linear-gradient(90deg, var(--gold-2), var(--gold));
+      color: #351d00;
+    }
+    .btn-secondary {
+      background: rgba(255,255,255,0.08);
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+    .btn-danger {
+      background: rgba(255,140,140,0.16);
+      color: #ffe0e0;
+      border: 1px solid rgba(255,140,140,0.24);
     }
 
     h1 {
-      margin: 0 0 8px;
+      margin: 0 0 18px;
       text-align: center;
+      font-size: clamp(2rem, 4vw, 3.5rem);
       color: var(--gold);
-      font-size: clamp(2rem, 4vw, 3rem);
     }
 
-    .subtitle {
-      text-align: center;
-      color: var(--muted);
-      margin-bottom: 24px;
-      line-height: 1.6;
-    }
-
-    .progress-wrap {
-      margin-bottom: 24px;
-    }
-
+    .progress-wrap { margin-bottom: 20px; }
     .progress-top {
       display: flex;
       justify-content: space-between;
@@ -71,92 +295,101 @@
       font-size: 0.95rem;
       margin-bottom: 8px;
     }
-
     .progress-bar {
       width: 100%;
       height: 14px;
-      background: rgba(255,255,255,0.08);
       border-radius: 999px;
+      background: rgba(255,255,255,0.08);
       overflow: hidden;
     }
-
     .progress-fill {
       width: 0%;
       height: 100%;
-      background: linear-gradient(90deg, var(--gold-dark), var(--gold));
-      transition: width 0.35s ease;
+      background: linear-gradient(90deg, var(--gold-2), var(--gold), #fff1a5);
+      transition: width 0.4s ease;
     }
 
-    .card {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 20px;
+    .main-card {
+      background: var(--panel-strong);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 24px;
       padding: 24px;
     }
 
     .step {
-      color: var(--blue);
+      color: #ffe5a3;
       font-size: 0.92rem;
       text-transform: uppercase;
-      letter-spacing: 0.06em;
       font-weight: bold;
-      margin-bottom: 12px;
+      letter-spacing: 0.08em;
+      margin-bottom: 10px;
     }
 
-    .riddle-title {
-      margin: 0 0 14px;
-      font-size: 1.6rem;
-    }
-
-    .riddle-text {
-      white-space: pre-line;
+    .riddle {
+      font-size: clamp(1.28rem, 2.3vw, 1.75rem);
+      line-height: 1.7;
       color: var(--text);
-      font-size: 1.12rem;
-      line-height: 1.8;
-      margin-bottom: 20px;
+      min-height: 150px;
+      display: flex;
+      align-items: center;
+      white-space: pre-line;
     }
 
-    .hint-box {
-      display: none;
-      margin-top: 12px;
-      padding: 14px;
-      border-left: 4px solid var(--blue);
-      border-radius: 12px;
-      background: rgba(56,189,248,0.08);
-      color: #dbeafe;
-      line-height: 1.6;
-    }
-
-    .buttons {
+    .main-actions {
       display: flex;
       gap: 12px;
       flex-wrap: wrap;
-      margin-top: 20px;
+      margin-top: 18px;
     }
 
-    button {
-      border: none;
-      border-radius: 14px;
-      padding: 14px 18px;
-      font-size: 1rem;
-      font-weight: bold;
-      cursor: pointer;
-      transition: 0.2s ease;
+    .hint-box, .answer-box, .status-box {
+      display: none;
+      margin-top: 16px;
+      padding: 16px 18px;
+      border-radius: 18px;
+      line-height: 1.7;
+      animation: fadeIn 0.25s ease;
     }
 
-    button:hover {
-      transform: translateY(-1px);
+    .hint-box {
+      background: var(--hint);
+      border-left: 4px solid #9ddbff;
+      color: #ebf8ff;
     }
 
-    .btn-primary {
-      background: linear-gradient(90deg, var(--gold-dark), var(--gold));
-      color: #111827;
+    .answer-box {
+      background: rgba(141,245,191,0.10);
+      border-left: 4px solid var(--success);
+      color: #eafff0;
     }
 
-    .btn-secondary {
+    .status-box {
       background: rgba(255,255,255,0.08);
-      color: var(--text);
-      border: 1px solid rgba(255,255,255,0.08);
+      border-left: 4px solid #ffe6a5;
+      color: #fff3d6;
+    }
+
+    .admin-panel {
+      display: none;
+      margin-top: 20px;
+      padding: 18px;
+      border-radius: 20px;
+      background: rgba(0,0,0,0.18);
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .admin-panel-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .admin-tag {
+      color: #ffe8ab;
+      font-weight: bold;
     }
 
     .final-screen {
@@ -165,194 +398,342 @@
       padding: 24px 8px 8px;
     }
 
-    .final-screen .emoji {
-      font-size: 4rem;
-      margin-bottom: 14px;
-    }
-
     .final-screen h2 {
-      margin: 0 0 10px;
       color: var(--gold);
       font-size: 2rem;
+      margin-bottom: 10px;
     }
 
     .final-screen p {
       color: var(--muted);
-      line-height: 1.7;
-      font-size: 1.08rem;
-      max-width: 650px;
-      margin: 0 auto 20px;
+      line-height: 1.8;
+      max-width: 680px;
+      margin: 0 auto 14px;
+      font-size: 1.05rem;
+    }
+
+    .final-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 18px;
     }
 
     .small-note {
-      margin-top: 18px;
+      margin-top: 14px;
       text-align: center;
-      color: #94a3b8;
+      color: rgba(255,245,224,0.82);
       font-size: 0.92rem;
     }
 
-    @media (max-width: 640px) {
-      .container {
-        padding: 18px;
-      }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
-      .card {
-        padding: 18px;
-      }
-
-      .buttons {
-        flex-direction: column;
-      }
-
-      button {
-        width: 100%;
-      }
+    @media (max-width: 700px) {
+      .container { padding: 16px; }
+      .main-card { padding: 18px; }
+      .main-actions, .final-actions { flex-direction: column; }
+      .main-actions button, .final-actions button, .admin-access input, .admin-access button { width: 100%; }
+      .admin-access { width: 100%; }
+      .temple { opacity: 0.24; transform: scale(0.85); left: -10px; }
+      .palm { opacity: 0.72; }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>🗺️ Chasse au trésor</h1>
-    <div class="subtitle">
-      Partie 1 : lis chaque énigme et suis la direction pour savoir où aller.
-      <br>
-      Aucune réponse à écrire dans cette partie.
+  <div class="scene">
+    <div class="sun"></div>
+    <div class="temple">
+      <div class="roof3"></div>
+      <div class="roof2"></div>
+      <div class="roof1"></div>
+      <div class="base"></div>
     </div>
-
-    <div class="progress-wrap">
-      <div class="progress-top">
-        <span>Progression</span>
-        <span id="progressText">Énigme 1 / 3</span>
-      </div>
-      <div class="progress-bar">
-        <div class="progress-fill" id="progressFill"></div>
-      </div>
+    <div class="lantern l1"></div>
+    <div class="lantern l2"></div>
+    <div class="lantern l3"></div>
+    <div class="lantern l4"></div>
+    <div class="lantern l5"></div>
+    <div class="wave w1"></div>
+    <div class="wave w2"></div>
+    <div class="sea"></div>
+    <div class="sand"></div>
+    <div class="palm left">
+      <div class="trunk"></div>
+      <div class="leaf l1"></div><div class="leaf l2"></div><div class="leaf l3"></div><div class="leaf l4"></div><div class="leaf l5"></div><div class="leaf l6"></div>
     </div>
+    <div class="palm right">
+      <div class="trunk"></div>
+      <div class="leaf l1"></div><div class="leaf l2"></div><div class="leaf l3"></div><div class="leaf l4"></div><div class="leaf l5"></div><div class="leaf l6"></div>
+    </div>
+  </div>
 
-    <div class="card" id="gameCard">
-      <div class="step" id="stepLabel">Énigme 1</div>
-      <h2 class="riddle-title" id="riddleTitle">Chargement...</h2>
-      <div class="riddle-text" id="riddleText"></div>
+  <div class="app">
+    <div class="container">
+      <div class="header">
+        <div class="brand">
+          <div class="pill">🇹🇭 Chasse au trésor Thaïlande</div>
+          <div class="pill" id="modePill">Mode joueur</div>
+        </div>
 
-      <div class="buttons">
-        <button class="btn-secondary" id="hintBtn">Voir l'indice</button>
-        <button class="btn-primary" id="nextBtn">Énigme suivante</button>
+        <div class="admin-access">
+          <input id="adminCodeInput" type="password" placeholder="Code admin" maxlength="4" />
+          <button class="btn-secondary" id="adminLoginBtn">Admin</button>
+        </div>
       </div>
 
-      <div class="hint-box" id="hintBox"></div>
-    </div>
+      <h1>Voyage énigme par énigme</h1>
 
-    <div class="final-screen" id="finalScreen">
-  <div class="emoji">🏴‍☠️</div>
-  <h2>Partie 1 terminée</h2>
-  <p>
-    Bravo ! Tu as réussi les 3 premières énigmes 🎉
-  </p>
+      <div class="progress-wrap">
+        <div class="progress-top">
+          <span id="progressLabel">Progression</span>
+          <span id="progressText">Énigme 1 / 47</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+      </div>
 
-  <p style="margin-top: 12px; font-weight: bold; color: #fbbf24;">
-    🔥 La suite dès demain...
-  </p>
+      <div class="main-card" id="gameCard">
+        <div class="step" id="stepLabel">Énigme 1</div>
+        <div class="riddle" id="riddleText"></div>
 
-  <p style="font-size: 1.1rem;">
-    La partie 2 t’attend avec plein de surprises dingues 😈💰
-  </p>
+        <div class="main-actions">
+          <button class="btn-secondary" id="toggleHintBtn">Afficher l'indice</button>
+          <button class="btn-primary" id="prevBtn">Précédent</button>
+          <button class="btn-primary" id="nextBtn">Suivant</button>
+        </div>
 
-  <button class="btn-primary" id="restartBtn">Recommencer</button>
-</div>
+        <div class="hint-box" id="hintBox"></div>
+        <div class="answer-box" id="answerBox"></div>
+        <div class="status-box" id="statusBox"></div>
+      </div>
 
-    <div class="small-note">
-      Tu peux modifier les textes des énigmes directement dans le code JavaScript.
+      <div class="admin-panel" id="adminPanel">
+        <div class="admin-panel-top">
+          <div class="admin-tag">Mode admin activé — réponses visibles</div>
+          <button class="btn-danger" id="adminLogoutBtn">Quitter le mode admin</button>
+        </div>
+        <div class="small-note">Le parcours reste identique au joueur, mais la réponse de chaque étape s'affiche en dessous.</div>
+      </div>
+
+      <div class="final-screen" id="finalScreen">
+        <h2>Parcours terminé</h2>
+        <p>Bravo. Toutes les énigmes de la chasse thaïlandaise ont été parcourues.</p>
+        <p>La suite dès demain… la partie 2 t’attend avec plein de surprises dingues.</p>
+        <div class="final-actions">
+          <button class="btn-primary" id="restartBtn">Recommencer</button>
+        </div>
+      </div>
+
+      <div class="small-note">Les indices restent cachés tant que le bouton n'est pas activé.</div>
     </div>
   </div>
 
   <script>
+    const ADMIN_CODE = "0605";
+
     const enigmes = [
-      {
-        titre: "Énigme 1",
-        texte: "Cherche l'endroit le plus Noël de Noël.\nIl est vert... ah.",
-        indice: "Pense à quelque chose de très lié à Noël, souvent vert, avec des décorations."
-      },
-      {
-        titre: "Énigme 2",
-        texte: "Je suis Air... but i'm fryer.",
-        indice: "C'est un appareil de cuisine très à la mode."
-      },
-      {
-        titre: "Énigme 3",
-        texte: "Si t'as des allergies, c'est dedans.",
-        indice: "Cherche un endroit ou un objet où l'on range souvent les médicaments."
-      }
+      { texte: "Dans les rues de Bangkok, les plats dansent sur le feu. Trouve l’endroit où la chaleur transforme tout.", reponse: "Plaques de cuisson", indice: "Cherche dans la cuisine l'endroit où on pose poêles et casseroles pour chauffer. C'est la zone principale pour cuire sur le feu." },
+      { texte: "Sous la chaleur thaïlandaise, il faut garder le frais. Cherche le gardien du froid.", reponse: "Frigo", indice: "Va dans la cuisine vers le grand meuble froid qui garde boissons, aliments et desserts au frais." },
+      { texte: "Ici, pas de wok, mais ça chauffe vite, et ça tourne comme un bateau sur les canaux.", reponse: "Micro-ondes", indice: "Cherche l'appareil de cuisine qui réchauffe très vite et qui a souvent un plateau rond qui tourne à l'intérieur." },
+      { texte: "Les voyageurs fatigués de Chiang Mai viennent ici reprendre des forces le matin.", reponse: "Cafetière", indice: "Pense à l'objet qui prépare le café du matin. Regarde près des tasses, capsules ou dosettes." },
+      { texte: "Après un grand festin thaï, quelqu’un nettoie sans rien dire.", reponse: "Lave-vaisselle", indice: "Cherche l'appareil fermé où l'on range assiettes, verres et couverts sales pour qu'ils soient lavés." },
+      { texte: "Comme les rivières de Thaïlande, l’eau y coule sans arrêt.", reponse: "Évier", indice: "Va là où l'on ouvre le robinet dans la cuisine pour rincer, laver ou remplir un verre." },
+      { texte: "Curry, piment, basilic… Les saveurs du pays sont cachées ici.", reponse: "Placard à épices", indice: "Cherche un placard ou tiroir où sont rangés sel, poivre, curry, paprika, herbes et petits pots." },
+      { texte: "Pour manger comme en Thaïlande, il te faut des outils… ils dorment ici.", reponse: "Tiroir à couverts", indice: "Va vers le tiroir où sont rangés fourchettes, couteaux, cuillères et parfois baguettes." },
+      { texte: "Street food moderne : croustillant sans huile, rapide comme un tuk-tuk.", reponse: "Air fryer", indice: "Cherche l'appareil de cuisine qui ressemble à une petite friteuse moderne et qui cuit avec de l'air chaud." },
+      { texte: "Les grandes marmites des marchés se reposent dans ce repaire.", reponse: "Placard à casseroles", indice: "Va là où sont rangées poêles, casseroles, couvercles et grands ustensiles de cuisson." },
+      { texte: "Après un long voyage, les explorateurs s’allongent ici comme des rois.", reponse: "Canapé", indice: "Cherche dans le salon l'endroit le plus confortable pour s'asseoir ou s'allonger devant la télé." },
+      { texte: "Dans ce jeu, pas d’éléphants… mais une bataille digne d’un stade thaïlandais.", reponse: "Baby-foot", indice: "Cherche le jeu de table avec des barres et de petits joueurs alignés pour taper dans une balle." },
+      { texte: "Derrière ces vitres comme dans un temple, des trésors sont exposés.", reponse: "Meuble vitré", indice: "Cherche un meuble avec des portes ou faces en verre où l'on voit les objets rangés à l'intérieur." },
+      { texte: "Quatre portes comme quatre temples, l’un d’eux cache ton chemin.", reponse: "Meuble 4 armoires", indice: "Cherche un meuble avec quatre compartiments ou quatre portes distinctes." },
+      { texte: "Comme un marché plein de cases, certaines s’ouvrent, d’autres glissent.", reponse: "Meuble à carrés", indice: "Regarde du côté d'un meuble organisé en cases ou cubes, souvent carré ou rectangulaire." },
+      { texte: "Les moines étudient, toi aussi… trouve l’endroit du travail et du calme.", reponse: "Bureau", indice: "Va à l'endroit où l'on s'assoit pour travailler, écrire, poser un ordinateur ou des papiers." },
+      { texte: "Une fenêtre magique vers le monde, sans quitter la maison.", reponse: "Télé", indice: "Cherche l'écran principal du salon ou de la pièce de vie." },
+      { texte: "Pose ton thé thaï ici, près du repos.", reponse: "Table basse", indice: "Cherche la petite table placée devant le canapé ou près du coin salon." },
+      { texte: "Quand le soleil disparaît sur les plages de Phuket, cette lumière prend le relais.", reponse: "Lampe", indice: "Va vers un objet qui s'allume pour éclairer quand il fait sombre : lampe de salon, de table ou sur pied." },
+      { texte: "Comme un reflet dans l’eau d’un temple, tu t’y vois.", reponse: "Miroir", indice: "Cherche l'objet dans lequel tu peux voir ton visage se refléter." },
+      { texte: "Après la jungle et les temples, le voyageur trouve ici son repos.", reponse: "Lit", indice: "Va dans la chambre vers l'endroit où l'on dort." },
+      { texte: "Les habits des explorateurs sont gardés derrière ces portes.", reponse: "Armoire", indice: "Cherche le meuble de chambre où l'on range vêtements, vestes ou linge." },
+      { texte: "Avant de dormir sous les étoiles thaïes, tu poses ton trésor ici.", reponse: "Table de nuit", indice: "Regarde juste à côté du lit : petite table ou petit meuble pour poser téléphone, lampe ou livre." },
+      { texte: "Comme une pluie tropicale, l’eau tombe du ciel.", reponse: "Douche", indice: "Va dans la salle de bain à l'endroit où l'on se lave debout sous l'eau." },
+      { texte: "Les rois de Siam se détendaient… comme ici dans l’eau.", reponse: "Baignoire", indice: "Cherche l'endroit de la salle de bain où l'on peut s'allonger dans l'eau." },
+      { texte: "Avant d’entrer dans un temple, on se prépare face à son reflet.", reponse: "Miroir salle de bain", indice: "Va dans la salle de bain regarder au-dessus du lavabo." },
+      { texte: "Sous la surface, sont cachés les secrets de beauté.", reponse: "Meuble sous lavabo", indice: "Cherche juste sous le lavabo de la salle de bain, dans le meuble ou les portes du bas." },
+      { texte: "Continue ton voyage : cherche maintenant dans un tiroir secret de la chambre ou de la salle de bain.", reponse: "Tiroir secret", indice: "Regarde dans un tiroir discret, personnel, souvent fermé ou peu utilisé, dans une chambre ou une salle de bain." },
+      { texte: "Pause spéciale du maître du jeu : cherche l'étape suivante directement à proximité du précédent indice.", reponse: "Action à faire", indice: "Le meilleur indice est de regarder juste autour de la cachette précédente : dessus, dessous, derrière ou dans le meuble voisin." },
+      { texte: "Encore une étape spéciale : le prochain chemin est très proche, presque collé à la précédente cachette.", reponse: "Action à faire", indice: "Reste dans la même zone. Vérifie immédiatement à côté, dans le compartiment voisin ou juste derrière." },
+      { texte: "Parfums, couleurs, soins… le rituel thaï commence ici.", reponse: "Meuble produits salle de bain", indice: "Cherche l'endroit où sont rangés parfums, crèmes, brosses, maquillage ou produits de toilette." },
+      { texte: "Ce sol ne pousse pas, mais recouvre la terre comme dans un jardin zen.", reponse: "Cailloux", indice: "Va dehors ou dans une zone déco où il y a des petits cailloux, galets ou gravier." },
+      { texte: "Ce n’est pas un tuk-tuk… mais il t’emmène loin.", reponse: "Voiture Lexus", indice: "Cherche du côté de la voiture ou de l'endroit où elle est garée." },
+      { texte: "Comme les rivières, ça tourne et ça nettoie sans fin.", reponse: "Machine à laver", indice: "Cherche l'appareil où l'on met le linge sale pour le laver en tournant." },
+      { texte: "Les outils des explorateurs sont cachés ici.", reponse: "Coin rangement extérieur", indice: "Va dehors vers la zone de rangement où l'on garde outils, accessoires d'extérieur ou matériel." },
+      { texte: "Sous le soleil de Thaïlande, on se repose ici.", reponse: "Chaise extérieure", indice: "Cherche dehors un siège ou fauteuil pour s'asseoir à l'air libre." },
+      { texte: "La nature tropicale vit dans ces petits royaumes.", reponse: "Plantes / pots", indice: "Regarde les plantes en pot, jardinières ou coins verts à l'intérieur ou à l'extérieur." },
+      { texte: "Après la rivière, les vêtements sèchent au vent.", reponse: "Étendoir", indice: "Cherche l'endroit où l'on suspend le linge après l'avoir lavé." },
+      { texte: "La nuit tombe sur la jungle, une lumière reste.", reponse: "Lampe extérieure", indice: "Va vers un éclairage placé dehors : appliquée murale, lampe de terrasse ou lanterne extérieure." },
+      { texte: "À l’abri de la pluie tropicale, on cache ce qui doit rester sec.", reponse: "Abri / garage", indice: "Cherche la zone couverte à l'extérieur, type garage, abri, cabanon ou endroit protégé." },
+      { texte: "Après la récolte, on pose ici son panier.", reponse: "Table extérieure", indice: "Va vers la table située dehors, sur terrasse, balcon ou jardin." },
+      { texte: "En rentrant du voyage, tu déposes ton dernier objet ici.", reponse: "Clés / vide-poche", indice: "Cherche près de l'entrée l'endroit où l'on pose ses clés, sa monnaie ou petits objets de poche." },
+      { texte: "Avant d’entrer dans un temple, on enlève ça.", reponse: "Chaussures", indice: "Regarde près de l'entrée ou dans le meuble à chaussures." },
+      { texte: "Pour les nuits fraîches, on s’y cache comme sous une tente.", reponse: "Couvertures", indice: "Cherche le plaid, les couvertures ou le linge chaud rangé dans un panier, placard ou sur le lit." },
+      { texte: "Les petits aventuriers cachent leurs trésors ici.", reponse: "Coffre à jouets", indice: "Va vers la zone enfant ou l'endroit où sont stockés jeux, jouets et peluches." },
+      { texte: "Les manteaux attendent comme des voyageurs immobiles.", reponse: "Placard manteaux", indice: "Cherche un placard ou une penderie près de l'entrée avec vestes, manteaux ou sacs." },
+      { texte: "Histoires et légendes de Thaïlande reposent ici.", reponse: "Bibliothèque", indice: "Va vers les livres, étagères ou meuble où sont rangés romans, BD ou objets de lecture." },
+      { texte: "Comme dans un marché, les boissons attendent ici.", reponse: "Bouteilles", indice: "Cherche l'endroit où sont rangées bouteilles d'eau, vin, jus ou autres boissons." },
+      { texte: "Pour nettoyer après la jungle, tout est rangé ici.", reponse: "Produits ménagers", indice: "Va vers le placard, la buanderie ou le meuble où l'on range lessive, sprays et produits de nettoyage." },
+      { texte: "En rentrant d’un long voyage, tu accroches ici ton manteau.", reponse: "Porte-manteau", indice: "Cherche un crochet, support ou meuble où l'on suspend vestes et manteaux." },
+      { texte: "Le trésor du royaume de Siam est caché là où tu gardes ce qui a de la valeur pour toi.", reponse: "Cachette trésor final", indice: "Pense à TON endroit le plus précieux : boîte à bijoux, coffre, tiroir secret, rangement personnel ou endroit où tu caches les objets importants." }
     ];
 
-    let indexActuel = 0;
+    let currentIndex = 0;
+    let hintVisible = false;
+    let adminMode = false;
 
-    const stepLabel = document.getElementById("stepLabel");
-    const riddleTitle = document.getElementById("riddleTitle");
-    const riddleText = document.getElementById("riddleText");
-    const hintBox = document.getElementById("hintBox");
-    const hintBtn = document.getElementById("hintBtn");
-    const nextBtn = document.getElementById("nextBtn");
-    const restartBtn = document.getElementById("restartBtn");
-    const progressText = document.getElementById("progressText");
-    const progressFill = document.getElementById("progressFill");
-    const gameCard = document.getElementById("gameCard");
-    const finalScreen = document.getElementById("finalScreen");
+    const riddleText = document.getElementById('riddleText');
+    const stepLabel = document.getElementById('stepLabel');
+    const hintBox = document.getElementById('hintBox');
+    const answerBox = document.getElementById('answerBox');
+    const statusBox = document.getElementById('statusBox');
+    const progressText = document.getElementById('progressText');
+    const progressFill = document.getElementById('progressFill');
+    const progressLabel = document.getElementById('progressLabel');
+    const nextBtn = document.getElementById('nextBtn');
+    const prevBtn = document.getElementById('prevBtn');
+    const toggleHintBtn = document.getElementById('toggleHintBtn');
+    const finalScreen = document.getElementById('finalScreen');
+    const gameCard = document.getElementById('gameCard');
+    const restartBtn = document.getElementById('restartBtn');
+    const adminCodeInput = document.getElementById('adminCodeInput');
+    const adminLoginBtn = document.getElementById('adminLoginBtn');
+    const adminPanel = document.getElementById('adminPanel');
+    const adminLogoutBtn = document.getElementById('adminLogoutBtn');
+    const modePill = document.getElementById('modePill');
+
+    function showStatus(message) {
+      statusBox.textContent = message;
+      statusBox.style.display = 'block';
+      setTimeout(() => {
+        statusBox.style.display = 'none';
+      }, 2200);
+    }
 
     function updateProgress() {
-      progressText.textContent = `Énigme ${indexActuel + 1} / ${enigmes.length}`;
-      const percent = (indexActuel / enigmes.length) * 100;
-      progressFill.style.width = percent + "%";
+      const total = enigmes.length;
+      progressText.textContent = `Énigme ${currentIndex + 1} / ${total}`;
+      progressFill.style.width = `${(currentIndex / total) * 100}%`;
+      progressLabel.textContent = adminMode ? 'Progression admin' : 'Progression';
     }
 
-    function afficherEnigme() {
-      const enigme = enigmes[indexActuel];
-      stepLabel.textContent = `Énigme ${indexActuel + 1}`;
-      riddleTitle.textContent = enigme.titre;
-      riddleText.textContent = enigme.texte;
-      hintBox.style.display = "none";
-      hintBox.textContent = enigme.indice;
+    function renderHint() {
+      const current = enigmes[currentIndex];
+      hintBox.textContent = current.indice;
+      hintBox.style.display = hintVisible ? 'block' : 'none';
+      toggleHintBtn.textContent = hintVisible ? "Masquer l'indice" : "Afficher l'indice";
+    }
+
+    function renderAnswer() {
+      if (adminMode) {
+        answerBox.innerHTML = `<strong>Réponse :</strong> ${enigmes[currentIndex].reponse}`;
+        answerBox.style.display = 'block';
+      } else {
+        answerBox.style.display = 'none';
+      }
+    }
+
+    function renderStep() {
+      const total = enigmes.length;
+      const current = enigmes[currentIndex];
+      stepLabel.textContent = `Énigme ${currentIndex + 1}`;
+      riddleText.textContent = current.texte;
+      renderHint();
+      renderAnswer();
       updateProgress();
+      prevBtn.disabled = currentIndex === 0;
+      prevBtn.style.opacity = currentIndex === 0 ? '0.55' : '1';
+      nextBtn.textContent = currentIndex === total - 1 ? 'Terminer' : 'Suivant';
+      finalScreen.style.display = 'none';
+      gameCard.style.display = 'block';
+    }
 
-      if (indexActuel === enigmes.length - 1) {
-        nextBtn.textContent = "Terminer la partie";
+    function nextStep() {
+      if (currentIndex < enigmes.length - 1) {
+        currentIndex++;
+        hintVisible = false;
+        renderStep();
       } else {
-        nextBtn.textContent = "Énigme suivante";
+        finishAdventure();
       }
     }
 
-    function afficherIndice() {
-      hintBox.style.display = hintBox.style.display === "block" ? "none" : "block";
-    }
-
-    function enigmeSuivante() {
-      indexActuel++;
-
-      if (indexActuel < enigmes.length) {
-        afficherEnigme();
-      } else {
-        terminerPartie();
+    function prevStep() {
+      if (currentIndex > 0) {
+        currentIndex--;
+        hintVisible = false;
+        renderStep();
       }
     }
 
-    function terminerPartie() {
-      gameCard.style.display = "none";
-      finalScreen.style.display = "block";
-      progressText.textContent = `Énigmes terminées`;
-      progressFill.style.width = "100%";
+    function finishAdventure() {
+      gameCard.style.display = 'none';
+      finalScreen.style.display = 'block';
+      progressText.textContent = 'Parcours terminé';
+      progressFill.style.width = '100%';
     }
 
-    function recommencer() {
-      indexActuel = 0;
-      gameCard.style.display = "block";
-      finalScreen.style.display = "none";
-      afficherEnigme();
+    function restartAdventure() {
+      currentIndex = 0;
+      hintVisible = false;
+      renderStep();
     }
 
-    hintBtn.addEventListener("click", afficherIndice);
-    nextBtn.addEventListener("click", enigmeSuivante);
-    restartBtn.addEventListener("click", recommencer);
+    function toggleHint() {
+      hintVisible = !hintVisible;
+      renderHint();
+    }
 
-    afficherEnigme();
+    function enableAdminMode() {
+      adminMode = true;
+      adminPanel.style.display = 'block';
+      modePill.textContent = 'Mode admin';
+      adminCodeInput.value = '';
+      renderAnswer();
+      showStatus('Mode admin activé.');
+      renderStep();
+    }
+
+    function disableAdminMode() {
+      adminMode = false;
+      adminPanel.style.display = 'none';
+      modePill.textContent = 'Mode joueur';
+      renderAnswer();
+      showStatus('Retour au mode joueur.');
+      renderStep();
+    }
+
+    function tryAdminLogin() {
+      if (adminCodeInput.value === ADMIN_CODE) {
+        enableAdminMode();
+      } else {
+        showStatus('Code admin incorrect.');
+      }
+    }
+
+    nextBtn.addEventListener('click', nextStep);
+    prevBtn.addEventListener('click', prevStep);
+    toggleHintBtn.addEventListener('click', toggleHint);
+    restartBtn.addEventListener('click', restartAdventure);
+    adminLoginBtn.addEventListener('click', tryAdminLogin);
+    adminLogoutBtn.addEventListener('click', disableAdminMode);
+    adminCodeInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') tryAdminLogin();
+    });
+
+    renderStep();
   </script>
 </body>
 </html>
