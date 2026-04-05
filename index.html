@@ -441,9 +441,94 @@
       .temple { opacity: 0.24; transform: scale(0.85); left: -10px; }
       .palm { opacity: 0.72; }
     }
+
+
+    .site-lock {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: linear-gradient(180deg, rgba(24,18,43,0.94), rgba(18,12,32,0.96));
+      backdrop-filter: blur(12px);
+    }
+
+    .site-lock.hidden { display: none; }
+
+    .lock-card {
+      width: min(440px, 100%);
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 28px;
+      padding: 28px;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.35);
+      text-align: center;
+    }
+
+    .lock-icon {
+      font-size: 3rem;
+      margin-bottom: 12px;
+    }
+
+    .lock-card h2 {
+      margin: 0 0 10px;
+      color: var(--gold);
+      font-size: 2rem;
+    }
+
+    .lock-card p {
+      margin: 0 0 18px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .lock-form {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .lock-form input {
+      width: 170px;
+      max-width: 100%;
+      padding: 14px 16px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.16);
+      background: rgba(255,255,255,0.1);
+      color: white;
+      text-align: center;
+      font-size: 1.05rem;
+      letter-spacing: 0.14em;
+      outline: none;
+    }
+
+    .lock-error {
+      min-height: 24px;
+      margin-top: 14px;
+      color: #ffd1d1;
+      font-size: 0.95rem;
+    }
+
   </style>
 </head>
 <body>
+
+  <div class="site-lock" id="siteLock">
+    <div class="lock-card">
+      <div class="lock-icon">🔐</div>
+      <h2>Accès protégé</h2>
+      <p>Entre le code à 4 chiffres pour accéder au site.</p>
+      <div class="lock-form">
+        <input id="siteCodeInput" type="password" inputmode="numeric" maxlength="4" placeholder="Code" />
+        <button class="btn-primary" id="siteUnlockBtn">Entrer</button>
+      </div>
+      <div class="lock-error" id="siteLockMessage"></div>
+    </div>
+  </div>
+
   <div class="scene">
     <div class="sun"></div>
     <div class="temple">
@@ -534,6 +619,7 @@
   </div>
 
   <script>
+    const SITE_ACCESS_CODE = "1004";
     const ADMIN_CODE = "0605";
 
     const enigmes = [
@@ -565,8 +651,8 @@
       { texte: "Avant d’entrer dans un temple, on se prépare face à son reflet.", reponse: "Miroir salle de bain", indice: "Va dans la salle de bain regarder au-dessus du lavabo." },
       { texte: "Sous la surface, sont cachés les secrets de beauté.", reponse: "Meuble sous lavabo", indice: "Cherche juste sous le lavabo de la salle de bain, dans le meuble ou les portes du bas." },
       { texte: "Continue ton voyage : cherche maintenant dans un tiroir secret de la chambre ou de la salle de bain.", reponse: "Tiroir secret", indice: "Regarde dans un tiroir discret, personnel, souvent fermé ou peu utilisé, dans une chambre ou une salle de bain." },
-      { texte: "Pause spéciale du maître du jeu : cherche l'étape suivante directement à proximité du précédent indice.", reponse: "Action à faire", indice: "Le meilleur indice est de regarder juste autour de la cachette précédente : dessus, dessous, derrière ou dans le meuble voisin." },
-      { texte: "Encore une étape spéciale : le prochain chemin est très proche, presque collé à la précédente cachette.", reponse: "Action à faire", indice: "Reste dans la même zone. Vérifie immédiatement à côté, dans le compartiment voisin ou juste derrière." },
+      { texte: "Masturbe le maitre du jeu", reponse: "Action à faire", indice: "ce n'est que l'etape 1 d'un gros trésor" },
+      { texte: "Fait éjaculer le Maitre du jeu dans ta bouche (pas besoin d'avaler tu peux recracher). Une bague c'est peut etre ca le trésor, c'est du jamais dans les chasses ", reponse: "Action à faire", indice: "C'est l'étape d'un trésor que tu n'as jamais vu" },
       { texte: "Parfums, couleurs, soins… le rituel thaï commence ici.", reponse: "Meuble produits salle de bain", indice: "Cherche l'endroit où sont rangés parfums, crèmes, brosses, maquillage ou produits de toilette." },
       { texte: "Ce sol ne pousse pas, mais recouvre la terre comme dans un jardin zen.", reponse: "Cailloux", indice: "Va dehors ou dans une zone déco où il y a des petits cailloux, galets ou gravier." },
       { texte: "Ce n’est pas un tuk-tuk… mais il t’emmène loin.", reponse: "Voiture Lexus", indice: "Cherche du côté de la voiture ou de l'endroit où elle est garée." },
@@ -613,6 +699,10 @@
     const adminPanel = document.getElementById('adminPanel');
     const adminLogoutBtn = document.getElementById('adminLogoutBtn');
     const modePill = document.getElementById('modePill');
+    const siteLock = document.getElementById('siteLock');
+    const siteCodeInput = document.getElementById('siteCodeInput');
+    const siteUnlockBtn = document.getElementById('siteUnlockBtn');
+    const siteLockMessage = document.getElementById('siteLockMessage');
 
     function showStatus(message) {
       statusBox.textContent = message;
@@ -723,6 +813,21 @@
       }
     }
 
+
+    function unlockSite() {
+      siteLock.classList.add('hidden');
+      siteLockMessage.textContent = '';
+      siteCodeInput.value = '';
+    }
+
+    function tryUnlockSite() {
+      if (siteCodeInput.value === SITE_ACCESS_CODE) {
+        unlockSite();
+      } else {
+        siteLockMessage.textContent = 'Code incorrect. Réessaie.';
+      }
+    }
+
     nextBtn.addEventListener('click', nextStep);
     prevBtn.addEventListener('click', prevStep);
     toggleHintBtn.addEventListener('click', toggleHint);
@@ -732,8 +837,13 @@
     adminCodeInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') tryAdminLogin();
     });
+    siteUnlockBtn.addEventListener('click', tryUnlockSite);
+    siteCodeInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') tryUnlockSite();
+    });
 
     renderStep();
+    siteCodeInput.focus();
   </script>
 </body>
 </html>
